@@ -9,5 +9,11 @@ const observable = new Observable((subscriber) => {
 observable.subscribe({
     next: (value) => {
         console.log(value);
+    },
+    complete: () => {
+        console.log('complete called');
+    },
+    error: (err) => {
+        console.log(err);
     }
 });
