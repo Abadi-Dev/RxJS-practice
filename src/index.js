@@ -28,6 +28,7 @@ const observable = new Observable((subscriber) => {
 
 console.log('before');
 
+// this is th observer
 const subscription = observable.subscribe({
     next: (value) => {
         console.log(value);
@@ -43,7 +44,7 @@ const subscription = observable.subscribe({
 console.log('after');
 
 // this function will unsub the observer from the observable without the need 
-// to call the com
+// to call the complete the funtion, causing the observable to continue running
 // subscription.unsubscribe();
 
 // example:
