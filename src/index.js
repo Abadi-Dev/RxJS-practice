@@ -79,3 +79,15 @@ import { timer } from 'rxjs';
 
 // timer(2000, 1000).subscribe(n => console.log('timer', n));
 // interval(1000).subscribe(n => console.log('interval', n));
+
+
+// the fromEvent listens to a specific document the observable should watch
+
+import { fromEvent } from "rxjs";
+
+const observable = fromEvent(document, 'click');
+
+
+const observer = observable.subscribe(
+    console.log()
+)
