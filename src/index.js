@@ -144,31 +144,50 @@ import { of, from } from "rxjs";
 
 /**************************************************** */
 
-import { of } from "rxjs";
+import { of, fromEvent } from "rxjs";
 import { map, pluck } from 'rxjs/operators'
 
 
-const observable = of(1, 2, 3, 4, 5, 6);
-const doubelTheValue = observable.pipe(
-    map((value) => value + value) // value = every value in the array
-); // the of operator will push every value, so every value will go through the pipe
+// const observable = of(1, 2, 3, 4, 5, 6);
+// const doubelTheValue = observable.pipe(
+//     map((value) => value + value) // value = every value in the array
+// ); // the of operator will push every value, so every value will go through the pipe
+
+// // we can sub to the original observable or to the piped one 
+
+// console.log('this is the piped observable:');
+// const subscription = doubelTheValue.subscribe({
+//     next(value) {
+//         console.log(value);
+//     },
+//     complete() {
+//         console.log('of operator is done');
+//     }
+// });
+// subscription.unsubscribe;
+
+
+// console.log('this is the original observable');
+// const subscription2 = doubelTheValue.subscribe({
+//     next(value) {
+//         console.log(value);
+//     },
+//     complete() {
+//         console.log('of operator is done');
+//     }
+// });
+// subscription.unsubscribe;
+
+const observable = fromEvent(
+    document, 'keydown'
+);
+const plucked = observable.pipe(
+    pluck('code') // we are plucking the code value from the object, we dont care about other properties
+);
 
 // we can sub to the original observable or to the piped one 
 
-console.log('this is the piped observable:');
-const subscription = doubelTheValue.subscribe({
-    next(value) {
-        console.log(value);
-    },
-    complete() {
-        console.log('of operator is done');
-    }
-});
-subscription.unsubscribe;
-
-
-console.log('this is the original observable');
-const subscription2 = doubelTheValue.subscribe({
+const subscription = plucked.subscribe({
     next(value) {
         console.log(value);
     },
