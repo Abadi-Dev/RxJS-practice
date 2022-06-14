@@ -73,7 +73,6 @@ import { interval } from "rxjs";
 import { timer } from 'rxjs';
 
 
-
 // to know the diffrence between the interval and timer read : 
 // https://stackoverflow.com/questions/63717783/what-is-the-difference-between-the-rxjs-operators-delay-timer-and-interval
 
@@ -85,9 +84,47 @@ import { timer } from 'rxjs';
 
 import { fromEvent } from "rxjs";
 
-const observable = fromEvent(document, 'click');
+// takes two arguemnts, the dom element to listens to, and the event
+
+// const observable = fromEvent(document, 'click');
+
+// const subscription = observable.subscribe(
+//     console.log
+// );
+
+import { of, from } from "rxjs";
 
 
-const observer = observable.subscribe(
-    console.log()
-)
+// the "of" operator has unlimited values or args
+
+const observable = of(1, 2, 3, 4, 5, 6, [7, 8, 9]); // notice the diffrence in the console!
+
+const subscription = observable.subscribe({
+    next(value) {
+        console.log(value);
+    },
+    complete() {
+        console.log('of operator is done');
+    }
+});
+subscription.unsubscribe;
+
+console.log('the from operator starts here!');
+// we can flatten the array to remove the child array by using the FROM operator
+
+// 'from' operator only accepts 1 array(i think) and it outputs every element of the array
+
+//try these !:
+
+// const arr = [7, 8, 9];
+// const observable2 = from(arr);
+// const observable2 = from('abadi);
+const observable2 = from(fetch('https://jsonplaceholder.typicode.com/todos/1')); // the observer will wait for the promise to resolve
+const subscription2 = observable2.subscribe({
+    next(value) {
+        console.log(value);
+    },
+    complete() {
+        console.log('From operator is done');
+    }
+})
