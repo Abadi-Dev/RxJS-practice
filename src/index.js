@@ -145,7 +145,7 @@ import { of, from } from "rxjs";
 /**************************************************** */
 
 import { of, fromEvent } from "rxjs";
-import { map, pluck } from 'rxjs/operators'
+import { filter, map, pluck } from 'rxjs/operators'
 
 
 // const observable = of(1, 2, 3, 4, 5, 6);
@@ -178,16 +178,40 @@ import { map, pluck } from 'rxjs/operators'
 // });
 // subscription.unsubscribe;
 
+// const observable = fromEvent(
+//     document, 'keydown'
+// );
+// const plucked = observable.pipe(
+//     pluck('code') // we are plucking the code value from the object, we dont care about other properties
+// );
+
+// // we can sub to the original observable or to the piped one 
+
+// const subscription = plucked.subscribe({
+//     next(value) {
+//         console.log(value);
+//     },
+//     complete() {
+//         console.log('of operator is done');
+//     }
+// });
+// subscription.unsubscribe;
+
+// filter operater
 const observable = fromEvent(
     document, 'keydown'
 );
 const plucked = observable.pipe(
-    pluck('code') // we are plucking the code value from the object, we dont care about other properties
+    pluck('code'), // we are plucking the code value from the object, we dont care about other properties
 );
+const filtered = plucked.pipe(
+    filter(code => code === 'Space')
+); // here we will be given the value pushed from the previous pipe ('code')
+
 
 // we can sub to the original observable or to the piped one 
 
-const subscription = plucked.subscribe({
+const subscription = filtered.subscribe({
     next(value) {
         console.log(value);
     },
