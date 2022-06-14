@@ -60,8 +60,13 @@ setTimeout(() => {
 
 /*****************************************************************
  *
- */
-// this is to import the interval object which will be used in a declaritive way
+ this is to import the interval object which will be used in a declaritive way
+
+
+
+
+
+
 import { interval } from "rxjs";
 // const observable = interval(1000);
 
@@ -97,19 +102,21 @@ import { of, from } from "rxjs";
 
 // the "of" operator has unlimited values or args
 
-const observable = of(1, 2, 3, 4, 5, 6, [7, 8, 9]); // notice the diffrence in the console!
 
-const subscription = observable.subscribe({
-    next(value) {
-        console.log(value);
-    },
-    complete() {
-        console.log('of operator is done');
-    }
-});
-subscription.unsubscribe;
+// const observable = of(1, 2, 3, 4, 5, 6, [7, 8, 9]); // notice the diffrence in the console!
 
-console.log('the from operator starts here!');
+
+// const subscription = observable.subscribe({
+//     next(value) {
+//         console.log(value);
+//     },
+//     complete() {
+//         console.log('of operator is done');
+//     }
+// });
+// subscription.unsubscribe;
+
+// console.log('the from operator starts here!');
 // we can flatten the array to remove the child array by using the FROM operator
 
 // 'from' operator only accepts 1 array(i think) and it outputs every element of the array
@@ -119,12 +126,54 @@ console.log('the from operator starts here!');
 // const arr = [7, 8, 9];
 // const observable2 = from(arr);
 // const observable2 = from('abadi);
-const observable2 = from(fetch('https://jsonplaceholder.typicode.com/todos/1')); // the observer will wait for the promise to resolve
-const subscription2 = observable2.subscribe({
+// const observable2 = from(fetch('https://jsonplaceholder.typicode.com/todos/1')); // the observer will wait for the promise to resolve
+// const subscription2 = observable2.subscribe({
+//     next(value) {
+//         console.log(value);
+//     },
+//     complete() {
+//         console.log('From operator is done');
+//     }
+// })
+
+
+/**************************************************** */
+
+//pipes starts here!
+// pipes are used to manipulate data, like filtering and other pipes
+
+/**************************************************** */
+
+import { of } from "rxjs";
+import { map, pluck } from 'rxjs/operators'
+
+
+const observable = of(1, 2, 3, 4, 5, 6);
+const doubelTheValue = observable.pipe(
+    map((value) => value + value) // value = every value in the array
+); // the of operator will push every value, so every value will go through the pipe
+
+// we can sub to the original observable or to the piped one 
+
+console.log('this is the piped observable:');
+const subscription = doubelTheValue.subscribe({
     next(value) {
         console.log(value);
     },
     complete() {
-        console.log('From operator is done');
+        console.log('of operator is done');
     }
-})
+});
+subscription.unsubscribe;
+
+
+console.log('this is the original observable');
+const subscription2 = doubelTheValue.subscribe({
+    next(value) {
+        console.log(value);
+    },
+    complete() {
+        console.log('of operator is done');
+    }
+});
+subscription.unsubscribe;
