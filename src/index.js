@@ -145,7 +145,7 @@ import { of, from } from "rxjs";
 /**************************************************** */
 
 import { of, fromEvent } from "rxjs";
-import { filter, map, pluck } from 'rxjs/operators'
+import { filter, map, pluck, reduce } from 'rxjs/operators'
 
 
 // const observable = of(1, 2, 3, 4, 5, 6);
@@ -198,20 +198,39 @@ import { filter, map, pluck } from 'rxjs/operators'
 // subscription.unsubscribe;
 
 // filter operater
-const observable = fromEvent(
-    document, 'keydown'
-);
-const plucked = observable.pipe(
-    pluck('code'), // we are plucking the code value from the object, we dont care about other properties
-);
-const filtered = plucked.pipe(
-    filter(code => code === 'Space')
-); // here we will be given the value pushed from the previous pipe ('code')
+// const observable = fromEvent(
+//     document, 'keydown'
+// );
+// const plucked = observable.pipe(
+//     pluck('code'), // we are plucking the code value from the object, we dont care about other properties
+// );
+// const filtered = plucked.pipe( // here we are cennecting two pipes, firsy the pluck then the filter
+//     filter(code => code === 'Space')
+// ); // here we will be given the value pushed from the previous pipe ('code')
+// // an then we will filter out every code except the "space code"
+
+// // we can sub to the original observable or to the piped one 
+// const subscription = filtered.subscribe({
+//     next(value) {
+//         console.log(value);
+//     },
+//     complete() {
+//         console.log('of operator is done');
+//     }
+// });
+// subscription.unsubscribe;
+
+// an then we will filter out every code except the "space code"
+
+const observable = of(1, 2, 3, 4, 5, 6, 7, 8);
+
+const reduced = observable.pipe(
+    reduce((acc, val) => acc + val, 0) // the reduce operator will take two args, a function and a seed value, the seed value is optional but i'll write 0 instead
+)
 
 
 // we can sub to the original observable or to the piped one 
-
-const subscription = filtered.subscribe({
+const subscription = reduced.subscribe({
     next(value) {
         console.log(value);
     },
