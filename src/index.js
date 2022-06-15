@@ -111,7 +111,7 @@ import { of, from } from "rxjs";
 //         console.log(value);
 //     },
 //     complete() {
-//         console.log('of operator is done');
+//         console.log('complete is called');
 //     }
 // });
 // subscription.unsubscribe;
@@ -145,7 +145,7 @@ import { of, from } from "rxjs";
 /**************************************************** */
 
 import { of, fromEvent } from "rxjs";
-import { filter, map, pluck, reduce } from 'rxjs/operators'
+import { filter, map, pluck, reduce, take, scan } from 'rxjs/operators'
 
 
 // const observable = of(1, 2, 3, 4, 5, 6);
@@ -161,7 +161,7 @@ import { filter, map, pluck, reduce } from 'rxjs/operators'
 //         console.log(value);
 //     },
 //     complete() {
-//         console.log('of operator is done');
+//         console.log('complete is called');
 //     }
 // });
 // subscription.unsubscribe;
@@ -173,7 +173,7 @@ import { filter, map, pluck, reduce } from 'rxjs/operators'
 //         console.log(value);
 //     },
 //     complete() {
-//         console.log('of operator is done');
+//         console.log('complete is called');
 //     }
 // });
 // subscription.unsubscribe;
@@ -192,7 +192,7 @@ import { filter, map, pluck, reduce } from 'rxjs/operators'
 //         console.log(value);
 //     },
 //     complete() {
-//         console.log('of operator is done');
+//         console.log('complete is called');
 //     }
 // });
 // subscription.unsubscribe;
@@ -215,7 +215,7 @@ import { filter, map, pluck, reduce } from 'rxjs/operators'
 //         console.log(value);
 //     },
 //     complete() {
-//         console.log('of operator is done');
+//         console.log('complete is called');
 //     }
 // });
 // subscription.unsubscribe;
@@ -224,18 +224,37 @@ import { filter, map, pluck, reduce } from 'rxjs/operators'
 
 const observable = of(1, 2, 3, 4, 5, 6, 7, 8);
 
-const reduced = observable.pipe(
+const taken = observable.pipe( // the take operator will will only take the specified number of eimtted data
+    take(5) // here we will take only the first 5 values from the observer (1-5) and then we will pass them to te observer or the next pipe
+);
+
+const reduced = taken.pipe(
     reduce((acc, val) => acc + val, 0) // the reduce operator will take two args, a function and a seed value, the seed value is optional but i'll write 0 instead
 )
 
-
+console.log('reduce operator starts here!');
 // we can sub to the original observable or to the piped one 
 const subscription = reduced.subscribe({
     next(value) {
         console.log(value);
     },
     complete() {
-        console.log('of operator is done');
+        console.log('complete is called');
     }
 });
 subscription.unsubscribe;
+
+const scanned = taken.pipe( // the scan operator  will push every calculation while the reduce will only push the last one
+    scan((acc, val) => val + acc, 0)
+)
+console.log('scan operator starts here!');
+// we can sub to the original observable or to the piped one 
+const subscription2 = scanned.subscribe({
+    next(value) {
+        console.log(value);
+    },
+    complete() {
+        console.log('complete is called');
+    }
+});
+subscription2.unsubscribe;
