@@ -1,6 +1,6 @@
 // important: this the imperative way of writing the observable and observer
 // this is to import the observable object which will be used in a imperative way
-import { Observable } from "rxjs";
+import { interval, Observable } from "rxjs";
 
 /*
 const observable = new Observable((subscriber) => {
@@ -268,9 +268,11 @@ const button = document.querySelector('#btn');
 const observable = fromEvent(
     button, 'click'
 ).pipe(
-    mergeMap(() => { return ajax.getJSON('https://jsonplaceholder.typicode.com/todos/1') })
-)
-
+    // map(() => { return ajax.getJSON('https://jsonplaceholder.typicode.com/todos/1') })
+    // mergeMap(() => { return ajax.getJSON('https://jsonplaceholder.typicode.com/todos/1') })
+    // the merge map operator might cause a memory leak
+    mergeMap(() => { return interval(1000).pipe(take(5)) }) // take will only allow 5 elements to be pushed to the observer
+);
 const subscription = observable.subscribe({
     next(value) {
         console.log(value)
