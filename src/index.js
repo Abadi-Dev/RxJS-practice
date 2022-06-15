@@ -222,28 +222,28 @@ import { filter, map, pluck, reduce, take, scan, tap } from 'rxjs/operators'
 
 // an then we will filter out every code except the "space code"
 
-const observable = of(1, 2, 3, 4, 5, 6, 7, 8);
+// const observable = of(1, 2, 3, 4, 5, 6, 7, 8);
 
-const taken = observable.pipe( // the take operator will will only take the specified number of eimtted data
-    take(5) // here we will take only the first 5 values from the observer (1-5) and then we will pass them to te observer or the next pipe
-    , tap(console.log) // the tap will spy on the values before they are pushed, it's very powerfull for debugging when we use alot of operators
-);
+// const taken = observable.pipe( // the take operator will will only take the specified number of eimtted data
+//     take(5) // here we will take only the first 5 values from the observer (1-5) and then we will pass them to te observer or the next pipe
+//     , tap(console.log) // the tap will spy on the values before they are pushed, it's very powerfull for debugging when we use alot of operators
+// ); // note that the tap operator cannot change any value
 
-const reduced = taken.pipe(
-    reduce((acc, val) => acc + val, 0) // the reduce operator will take two args, a function and a seed value, the seed value is optional but i'll write 0 instead
-)
+// const reduced = taken.pipe(
+//     reduce((acc, val) => acc + val, 0) // the reduce operator will take two args, a function and a seed value, the seed value is optional but i'll write 0 instead
+// )
 
-console.log('reduce operator starts here!');
-// we can sub to the original observable or to the piped one 
-const subscription = reduced.subscribe({
-    next(value) {
-        console.log(value);
-    },
-    complete() {
-        console.log('complete is called');
-    }
-});
-subscription.unsubscribe;
+// console.log('reduce operator starts here!');
+// // we can sub to the original observable or to the piped one 
+// const subscription = reduced.subscribe({
+//     next(value) {
+//         console.log(value);
+//     },
+//     complete() {
+//         console.log('complete is called');
+//     }
+// });
+// subscription.unsubscribe;
 
 // const scanned = taken.pipe( // the scan operator  will push every calculation while the reduce will only push the last one
 //     scan((acc, val) => val + acc, 0)
@@ -259,3 +259,26 @@ subscription.unsubscribe;
 //     }
 // });
 // subscription2.unsubscribe;
+
+
+import { ajax } from "rxjs/ajax";
+
+const button = document.querySelector('#btn');
+
+const observable = fromEvent(
+    button, 'click'
+).pipe(
+    map(() => { return ajax.getJSON('https://jsonplaceholder.typicode.com/todos/1') })
+)
+
+const subscription = observable.subscribe({
+    next(value) {
+        value.subscribe(
+            console.log
+        )
+    },
+    complete() {
+        console.log('complete is called');
+    }
+});
+subscription.unsubscribe;
