@@ -145,7 +145,7 @@ import { of, from } from "rxjs";
 /**************************************************** */
 
 import { of, fromEvent } from "rxjs";
-import { filter, map, pluck, reduce, take, scan, tap, mergeMap } from 'rxjs/operators'
+import { filter, map, pluck, reduce, take, scan, tap, mergeMap, switchMap, concatMap, exhaustMap } from 'rxjs/operators'
 
 
 // const observable = of(1, 2, 3, 4, 5, 6);
@@ -271,8 +271,19 @@ const observable = fromEvent(
     // map(() => { return ajax.getJSON('https://jsonplaceholder.typicode.com/todos/1') })
     // mergeMap(() => { return ajax.getJSON('https://jsonplaceholder.typicode.com/todos/1') })
     // the merge map operator might cause a memory leak
-    mergeMap(() => { return interval(1000).pipe(take(5)) }) // take will only allow 5 elements to be pushed to the observer
-);
+    // mergeMap(() => { return interval(1000).pipe(take(5)) }) // take will only allow 5 elements to be pushed to the observer
+    // and the inner pipe will allow us to click th button more the once
+    //switchMap(() => {
+    // concatMap(() => {
+    exhaustMap(() => {
+        // also try interval(1000) instead of ajax
+        return ajax.getJSON('https://jsonplaceholder.typicode.com/todos/1').pipe(take(5), tap({
+            complete() {
+                console.log('inner observable completed')
+            }
+        }))
+    }) // try the switchMap vs mergeMap vs concatMap vs exhaustMap to know the difference between them
+); // 
 const subscription = observable.subscribe({
     next(value) {
         console.log(value)
