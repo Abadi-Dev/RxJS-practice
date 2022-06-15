@@ -145,7 +145,7 @@ import { of, from } from "rxjs";
 /**************************************************** */
 
 import { of, fromEvent } from "rxjs";
-import { filter, map, pluck, reduce, take, scan } from 'rxjs/operators'
+import { filter, map, pluck, reduce, take, scan, tap } from 'rxjs/operators'
 
 
 // const observable = of(1, 2, 3, 4, 5, 6);
@@ -226,6 +226,7 @@ const observable = of(1, 2, 3, 4, 5, 6, 7, 8);
 
 const taken = observable.pipe( // the take operator will will only take the specified number of eimtted data
     take(5) // here we will take only the first 5 values from the observer (1-5) and then we will pass them to te observer or the next pipe
+    , tap(console.log) // the tap will spy on the values before they are pushed, it's very powerfull for debugging when we use alot of operators
 );
 
 const reduced = taken.pipe(
@@ -244,17 +245,17 @@ const subscription = reduced.subscribe({
 });
 subscription.unsubscribe;
 
-const scanned = taken.pipe( // the scan operator  will push every calculation while the reduce will only push the last one
-    scan((acc, val) => val + acc, 0)
-)
-console.log('scan operator starts here!');
-// we can sub to the original observable or to the piped one 
-const subscription2 = scanned.subscribe({
-    next(value) {
-        console.log(value);
-    },
-    complete() {
-        console.log('complete is called');
-    }
-});
-subscription2.unsubscribe;
+// const scanned = taken.pipe( // the scan operator  will push every calculation while the reduce will only push the last one
+//     scan((acc, val) => val + acc, 0)
+// )
+// console.log('scan operator starts here!');
+// // we can sub to the original observable or to the piped one 
+// const subscription2 = scanned.subscribe({
+//     next(value) {
+//         console.log(value);
+//     },
+//     complete() {
+//         console.log('complete is called');
+//     }
+// });
+// subscription2.unsubscribe;
