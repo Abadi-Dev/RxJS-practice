@@ -145,7 +145,7 @@ import { of, from } from "rxjs";
 /**************************************************** */
 
 import { of, fromEvent } from "rxjs";
-import { filter, map, pluck, reduce, take, scan, tap } from 'rxjs/operators'
+import { filter, map, pluck, reduce, take, scan, tap, mergeMap } from 'rxjs/operators'
 
 
 // const observable = of(1, 2, 3, 4, 5, 6);
@@ -268,14 +268,12 @@ const button = document.querySelector('#btn');
 const observable = fromEvent(
     button, 'click'
 ).pipe(
-    map(() => { return ajax.getJSON('https://jsonplaceholder.typicode.com/todos/1') })
+    mergeMap(() => { return ajax.getJSON('https://jsonplaceholder.typicode.com/todos/1') })
 )
 
 const subscription = observable.subscribe({
     next(value) {
-        value.subscribe(
-            console.log
-        )
+        console.log(value)
     },
     complete() {
         console.log('complete is called');
